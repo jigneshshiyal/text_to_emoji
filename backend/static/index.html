@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Emoji Finder</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .emoji-result {
+            display: inline-block;
+            font-size: 2.5rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-purple-200">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-96 text-center">
+        <h1 class="text-2xl font-extrabold text-gray-800 mb-4">Emoji Finder</h1>
+        <input id="query" type="text" placeholder="Enter text..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4 text-lg" oninput="fetchEmoji()" autocomplete="off">
+        <p id="result" class="mt-6 text-4xl font-semibold text-gray-900"></p>
+    </div>
+    <script>
+        async function fetchEmoji() {
+            const query = document.getElementById("query").value;
+            const result = document.getElementById("result");
+            if (!query.trim()) {
+                result.textContent = "";
+                return;
+            }
+            const response = await fetch(`/find_emoji?query=${query}`);
+            const data = await response.json();
+            result.innerHTML = `<span class="emoji-result">${data.emojis}</span>`;
+        }
+    </script>
+</body>
+</html>
